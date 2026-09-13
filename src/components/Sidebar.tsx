@@ -10,7 +10,6 @@ import {
   PanelLeftClose,
   Sparkles,
   ExternalLink,
-  Globe,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -26,7 +25,6 @@ interface SidebarProps {
   onOpenRedeem: () => void;
   onOpenAdmin: () => void;
   onOpenBuy: () => void;
-  onOpenDeployGuide?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -42,7 +40,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenRedeem,
   onOpenAdmin,
   onOpenBuy,
-  onOpenDeployGuide,
 }) => {
   return (
     <>
@@ -177,23 +174,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Footer actions */}
         <div className="p-3 border-t border-white/5 space-y-1 bg-[#06070a]">
-          {/* Deploy Guide button */}
-          {onOpenDeployGuide && (
-            <button
-              onClick={() => {
-                onOpenDeployGuide();
-                if (window.innerWidth < 768) onClose();
-              }}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-emerald-400" />
-                <span className="font-medium">Деплой на сайт</span>
-              </div>
-              <span className="text-[10px] text-emerald-400/90 font-mono">Бесплатно</span>
-            </button>
-          )}
-
           {/* Admin Panel button - without displaying the password */}
           <button
             onClick={() => {

@@ -6,7 +6,6 @@ import {
   TrendingUp,
   ShieldCheck,
   ArrowRight,
-  Globe,
   Zap,
   KeyRound,
   CheckCircle2,
@@ -16,14 +15,12 @@ interface WelcomeBannerProps {
   onSelectPrompt: (promptText: string) => void;
   tokensBalance: number;
   onOpenRedeem: () => void;
-  onOpenDeployGuide?: () => void;
 }
 
 export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
   onSelectPrompt,
   tokensBalance,
   onOpenRedeem,
-  onOpenDeployGuide,
 }) => {
   const capabilities = [
     {
@@ -78,15 +75,6 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
-            {onOpenDeployGuide && (
-              <button
-                onClick={onOpenDeployGuide}
-                className="flex items-center gap-1.5 px-3 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-300 hover:text-white transition-all cursor-pointer font-medium"
-              >
-                <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Инструкция по бесплатному деплою</span>
-              </button>
-            )}
             <div className="text-[11px] tracking-[0.2em] text-slate-400 font-mono uppercase">
               PLATFORM EDITION 2.4
             </div>
@@ -143,16 +131,6 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
                 <span>Инициализировать сессию</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
-
-              {onOpenDeployGuide && (
-                <button
-                  onClick={onOpenDeployGuide}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold transition-all cursor-pointer"
-                >
-                  <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Выложить на сайт (Бесплатно)</span>
-                </button>
-              )}
 
               {tokensBalance <= 50 && (
                 <button

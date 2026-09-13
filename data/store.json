@@ -117,10 +117,10 @@
     "test_user_1": {
       "id": "test_user_1",
       "name": "Пользователь #test_",
-      "tokensBalance": 4894,
-      "totalTokensUsed": 106,
+      "tokensBalance": 4789,
+      "totalTokensUsed": 211,
       "createdAt": 1789297712023,
-      "lastActive": 1789297712688
+      "lastActive": 1789298552417
     },
     "test_user_verify": {
       "id": "test_user_verify",
@@ -131,5 +131,5 @@
       "lastActive": 1789297787073
     }
   },
-  "totalTokensConsumed": 2191
+  "totalTokensConsumed": 2296
 }
