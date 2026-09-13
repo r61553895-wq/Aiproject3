@@ -1,0 +1,53 @@
+{
+  "keys": {
+    "GROK-START-10K": {
+      "code": "GROK-START-10K",
+      "tokens": 10000,
+      "label": "Стартовый промо-ключ (10,000 токенов)",
+      "createdAt": 1789295487638,
+      "isRedeemed": false,
+      "maxUses": 100,
+      "usedCount": 0
+    },
+    "GROK-PRO-50K": {
+      "code": "GROK-PRO-50K",
+      "tokens": 50000,
+      "label": "Промо-пакет PRO (50,000 токенов)",
+      "createdAt": 1789295487638,
+      "isRedeemed": false,
+      "maxUses": 10,
+      "usedCount": 0
+    },
+    "GROK-VIP-100K": {
+      "code": "GROK-VIP-100K",
+      "tokens": 100000,
+      "label": "VIP ключ (100,000 токенов)",
+      "createdAt": 1789295487638,
+      "isRedeemed": false,
+      "maxUses": 1,
+      "usedCount": 0
+    },
+    "GROK-NW91-8NNC-GETH": {
+      "code": "GROK-NW91-8NNC-GETH",
+      "tokens": 25000,
+      "label": "Тестовый клиент 1",
+      "createdAt": 1789295493761,
+      "isRedeemed": true,
+      "maxUses": 1,
+      "usedCount": 1,
+      "redeemedAt": 1789295498019,
+      "redeemedBy": "test_user_42"
+    }
+  },
+  "users": {
+    "test_user_42": {
+      "id": "test_user_42",
+      "name": "Пользователь #test_",
+      "tokensBalance": 29878,
+      "totalTokensUsed": 122,
+      "createdAt": 1789295498019,
+      "lastActive": 1789295506258
+    }
+  },
+  "totalTokensConsumed": 122
+}
