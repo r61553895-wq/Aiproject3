@@ -1,10 +1,25 @@
+export interface UserAccount {
+  id: string;
+  username: string;
+  email?: string;
+  name: string;
+  tokensBalance: number;
+  totalTokensUsed: number;
+  createdAt: number;
+  lastLoginAt: number;
+  role?: 'user' | 'admin';
+}
+
 export interface UserSession {
   id: string;
+  username?: string;
+  email?: string;
   name: string;
   tokensBalance: number;
   totalTokensUsed: number;
   createdAt: number;
   lastActive: number;
+  isRegistered?: boolean;
 }
 
 export interface TokenKey {

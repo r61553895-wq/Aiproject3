@@ -1,6 +1,6 @@
 import React from 'react';
 import { GroksonLogo } from './GroksonLogo';
-import { ChatSession } from '../types';
+import { ChatSession, UserAccount } from '../types';
 import {
   Plus,
   MessageSquare,
@@ -10,6 +10,8 @@ import {
   PanelLeftClose,
   Sparkles,
   ExternalLink,
+  User,
+  ArrowRight,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -22,6 +24,9 @@ interface SidebarProps {
   onDeleteSession: (id: string) => void;
   onClearAllSessions: () => void;
   tokensBalance: number;
+  currentUser: UserAccount | null;
+  onOpenAuth: () => void;
+  onOpenAccount: () => void;
   onOpenRedeem: () => void;
   onOpenAdmin: () => void;
   onOpenBuy: () => void;
@@ -37,6 +42,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onDeleteSession,
   onClearAllSessions,
   tokensBalance,
+  currentUser,
+  onOpenAuth,
+  onOpenAccount,
   onOpenRedeem,
   onOpenAdmin,
   onOpenBuy,
@@ -127,8 +135,57 @@ export const Sidebar: React.FC<SidebarProps> = ({
           )}
         </div>
 
-        {/* Token Balance Card */}
+        {/* User Account / Auth Section */}
         <div className="p-3 border-t border-white/5">
+          {currentUser ? (
+            <button
+              id="sidebar-account-btn"
+              onClick={() => {
+                onOpenAccount();
+                if (window.innerWidth < 768) onClose();
+              }}
+              className="w-full p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/5 flex items-center justify-between transition-colors group cursor-pointer text-left"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                  {(currentUser.name || currentUser.username).slice(0, 2).toUpperCase()}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs font-semibold text-white truncate">{currentUser.name}</div>
+                  <div className="text-[10px] text-slate-400 font-mono truncate">@{currentUser.username}</div>
+                </div>
+              </div>
+              <span className="text-[10px] text-cyan-400 font-medium px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 shrink-0">
+                Профиль
+              </span>
+            </button>
+          ) : (
+            <button
+              id="sidebar-login-btn"
+              onClick={() => {
+                onOpenAuth();
+                if (window.innerWidth < 768) onClose();
+              }}
+              className="w-full p-2.5 rounded-xl bg-gradient-to-r from-cyan-500/10 via-indigo-500/10 to-transparent hover:from-cyan-500/15 hover:via-indigo-500/15 border border-cyan-500/25 flex items-center justify-between transition-all group cursor-pointer text-left"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                  <User className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-semibold text-white flex items-center gap-1.5">
+                    <span>Войти в аккаунт</span>
+                  </div>
+                  <div className="text-[10px] text-cyan-300">Бонус +10 000 токенов</div>
+                </div>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          )}
+        </div>
+
+        {/* Token Balance Card */}
+        <div className="p-3 border-t border-white/5 pt-0">
           <div className="rounded-2xl bg-gradient-to-br from-[#121622] to-[#0d1017] border border-white/10 p-3.5 space-y-2.5 shadow-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 text-xs text-slate-400">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChatSession, ChatMessage, UserSession } from './types';
+import { ChatSession, ChatMessage, UserSession, UserAccount } from './types';
 import { Sidebar } from './components/Sidebar';
 import { WelcomeBanner } from './components/WelcomeBanner';
 import { ChatMessageItem } from './components/ChatMessageItem';
@@ -7,6 +7,8 @@ import { ChatInput } from './components/ChatInput';
 import { RedeemKeyModal } from './components/RedeemKeyModal';
 import { AdminPanelModal } from './components/AdminPanelModal';
 import { BuyTokensModal } from './components/BuyTokensModal';
+import { AuthModal } from './components/AuthModal';
+import { AccountModal } from './components/AccountModal';
 import { GroksonLogo } from './components/GroksonLogo';
 import { generateEdgeAIResponse } from './utils/aiFallback';
 import {
@@ -16,11 +18,13 @@ import {
   ShieldCheck,
   RotateCcw,
   MessageSquarePlus,
+  User,
 } from 'lucide-react';
 
 const SESSIONS_STORAGE_KEY = 'grokson_chats_v1';
 const USER_ID_STORAGE_KEY = 'grokson_user_id';
 const LOCAL_BALANCE_KEY = 'grokson_tokens_balance';
+const CURRENT_USER_KEY = 'grokson_current_user';
 
 export default function App() {
   // User identification
@@ -39,11 +43,24 @@ export default function App() {
     return saved ? Number(saved) : 5000;
   });
 
+  // Current logged in account state
+  const [currentUser, setCurrentUser] = useState<UserAccount | null>(() => {
+    try {
+      const saved = localStorage.getItem(CURRENT_USER_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to parse current user:', e);
+    }
+    return null;
+  });
+
   // Sidebar & Modals state
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isRedeemOpen, setIsRedeemOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isBuyOpen, setIsBuyOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
 
   // Chat sessions state
   const [sessions, setSessions] = useState<ChatSession[]>(() => {
@@ -96,9 +113,38 @@ export default function App() {
         if (data.user && typeof data.user.tokensBalance === 'number') {
           setTokensBalance(data.user.tokensBalance);
         }
+        if (data.account) {
+          setCurrentUser(data.account);
+          localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(data.account));
+        }
       }
     } catch (e) {
       console.log('Using local balance fallback');
+    }
+  };
+
+  const handleAuthSuccess = (account: UserAccount) => {
+    setCurrentUser(account);
+    setUserId(account.id);
+    localStorage.setItem(USER_ID_STORAGE_KEY, account.id);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(account));
+    setTokensBalance(account.tokensBalance);
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem(CURRENT_USER_KEY);
+    const newGuestId = `user_${Math.random().toString(36).substring(2, 9)}`;
+    setUserId(newGuestId);
+    localStorage.setItem(USER_ID_STORAGE_KEY, newGuestId);
+    setTokensBalance(5000);
+  };
+
+  const handleUpdateAccount = (updated: UserAccount) => {
+    setCurrentUser(updated);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updated));
+    if (typeof updated.tokensBalance === 'number') {
+      setTokensBalance(updated.tokensBalance);
     }
   };
 
@@ -389,6 +435,9 @@ export default function App() {
         onDeleteSession={handleDeleteSession}
         onClearAllSessions={handleClearAllSessions}
         tokensBalance={tokensBalance}
+        currentUser={currentUser}
+        onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenAccount={() => setIsAccountOpen(true)}
         onOpenRedeem={() => setIsRedeemOpen(true)}
         onOpenAdmin={() => setIsAdminOpen(true)}
         onOpenBuy={() => setIsBuyOpen(true)}
@@ -420,6 +469,33 @@ export default function App() {
 
           {/* Right Header Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Account / Login button */}
+            {currentUser ? (
+              <button
+                id="header-account-btn"
+                onClick={() => setIsAccountOpen(true)}
+                className="flex items-center gap-2 p-1 pl-2 pr-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
+                title="Личный кабинет"
+              >
+                <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white text-[10px] font-bold">
+                  {(currentUser.name || currentUser.username).slice(0, 2).toUpperCase()}
+                </div>
+                <span className="text-xs text-white font-medium max-w-[100px] truncate hidden sm:inline">
+                  {currentUser.name}
+                </span>
+              </button>
+            ) : (
+              <button
+                id="header-login-btn"
+                onClick={() => setIsAuthOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500/15 to-indigo-500/15 hover:from-cyan-500/25 hover:to-indigo-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition-all cursor-pointer shadow-sm"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Войти</span>
+                <span className="sm:hidden">Вход</span>
+              </button>
+            )}
+
             {/* Token balance chip */}
             <button
               onClick={() => setIsRedeemOpen(true)}
@@ -533,6 +609,27 @@ export default function App() {
         onClose={() => setIsBuyOpen(false)}
         onOpenRedeem={() => setIsRedeemOpen(true)}
       />
+
+      {/* Auth Modal (Login / Register) */}
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        onSuccess={handleAuthSuccess}
+        currentUserId={userId}
+      />
+
+      {/* User Account / Profile Modal */}
+      {currentUser && (
+        <AccountModal
+          isOpen={isAccountOpen}
+          onClose={() => setIsAccountOpen(false)}
+          account={currentUser}
+          onUpdateAccount={handleUpdateAccount}
+          onLogout={handleLogout}
+          onOpenRedeem={() => setIsRedeemOpen(true)}
+          onOpenBuy={() => setIsBuyOpen(true)}
+        />
+      )}
     </div>
   );
 }

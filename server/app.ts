@@ -10,6 +10,11 @@ import {
   revokeTokenKey,
   getAdminStats,
   getAllUsers,
+  registerAccount,
+  loginAccount,
+  getAccountById,
+  updateAccountProfile,
+  changeAccountPassword,
 } from './storage';
 
 const DEFAULT_GIGACHAT_KEY =
@@ -63,7 +68,82 @@ apiRouter.get('/user/:id', (req, res) => {
     return res.status(400).json({ error: 'userId is required' });
   }
   const user = getOrCreateUser(userId);
-  res.json({ user });
+  const account = getAccountById(userId);
+  res.json({ user, account });
+});
+
+// ----------------- Authentication Routes -----------------
+
+// Register a new account
+apiRouter.post('/auth/register', (req, res) => {
+  const { username, email, password, name, currentUserId } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ success: false, message: 'Логин и пароль обязательны' });
+  }
+
+  const result = registerAccount({
+    username,
+    email,
+    password,
+    name,
+    currentUserId,
+  });
+
+  if (!result.success) {
+    return res.status(400).json(result);
+  }
+
+  res.json(result);
+});
+
+// Login with credentials
+apiRouter.post('/auth/login', (req, res) => {
+  const { login, password } = req.body;
+  if (!login || !password) {
+    return res.status(400).json({ success: false, message: 'Введите логин и пароль' });
+  }
+
+  const result = loginAccount({ login, password });
+  if (!result.success) {
+    return res.status(401).json(result);
+  }
+
+  res.json(result);
+});
+
+// Get current account profile
+apiRouter.get('/auth/me/:id', (req, res) => {
+  const account = getAccountById(req.params.id);
+  if (!account) {
+    return res.status(404).json({ success: false, message: 'Аккаунт не найден' });
+  }
+  res.json({ success: true, account });
+});
+
+// Update display name / profile
+apiRouter.post('/auth/update-profile', (req, res) => {
+  const { userId, name } = req.body;
+  if (!userId || !name) {
+    return res.status(400).json({ success: false, message: 'userId и имя обязательны' });
+  }
+
+  const result = updateAccountProfile(userId, { name });
+  res.json(result);
+});
+
+// Change password
+apiRouter.post('/auth/change-password', (req, res) => {
+  const { userId, oldPassword, newPassword } = req.body;
+  if (!userId || !oldPassword || !newPassword) {
+    return res.status(400).json({ success: false, message: 'Все поля обязательны' });
+  }
+
+  const result = changeAccountPassword(userId, oldPassword, newPassword);
+  if (!result.success) {
+    return res.status(400).json(result);
+  }
+
+  res.json(result);
 });
 
 // Redeem a token voucher key
