@@ -254,9 +254,14 @@ export default function App() {
         }),
       });
 
-      const data = await res.json();
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {
+        data = null;
+      }
 
-      if (res.ok && data.text) {
+      if (res.ok && data?.text) {
         const assistantMsg: ChatMessage = {
           id: `msg_${Date.now() + 1}`,
           role: 'assistant',
@@ -280,15 +285,22 @@ export default function App() {
           )
         );
       } else {
+        const errorText =
+          data?.message ||
+          data?.error ||
+          (res.status >= 500
+            ? 'Серверный шлюз временно недоступен или перезагружается. Пожалуйста, попробуйте повторить запрос.'
+            : 'Произошла ошибка при обработке запроса.');
+
         const errorMsg: ChatMessage = {
           id: `msg_${Date.now() + 1}`,
           role: 'assistant',
-          content: data.message || data.error || 'Произошла ошибка при обработке запроса.',
+          content: errorText,
           timestamp: Date.now(),
           error: true,
         };
 
-        if (data.error === 'insufficient_tokens') {
+        if (data?.error === 'insufficient_tokens') {
           setIsRedeemOpen(true);
         }
 

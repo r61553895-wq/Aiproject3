@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { TokenKey, UserSession, AdminStats } from '../src/types.js';
+import os from 'os';
+import type { TokenKey, UserSession, AdminStats } from '../src/types';
 
 interface StoreData {
   keys: Record<string, TokenKey>;
@@ -8,7 +9,12 @@ interface StoreData {
   totalTokensConsumed: number;
 }
 
-const DATA_DIR = path.join(process.cwd(), 'data');
+// In Vercel serverless functions, process.cwd() is read-only (/var/task).
+// Only os.tmpdir() is writable in serverless environments.
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const DATA_DIR = isServerless
+  ? path.join(os.tmpdir(), 'grokson_data')
+  : path.join(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'store.json');
 
 const INITIAL_DATA: StoreData = {

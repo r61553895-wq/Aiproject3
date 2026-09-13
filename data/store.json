@@ -7,7 +7,7 @@
       "createdAt": 1789295487638,
       "isRedeemed": false,
       "maxUses": 100,
-      "usedCount": 0
+      "usedCount": 1
     },
     "GROK-PRO-50K": {
       "code": "GROK-PRO-50K",
@@ -37,6 +37,64 @@
       "usedCount": 1,
       "redeemedAt": 1789295498019,
       "redeemedBy": "test_user_42"
+    },
+    "GROK-VMVN-TLTI-ADSN": {
+      "code": "GROK-VMVN-TLTI-ADSN",
+      "tokens": 100,
+      "label": "Ключ на 100 токенов",
+      "createdAt": 1789295691732,
+      "isRedeemed": false,
+      "maxUses": 1,
+      "usedCount": 0
+    },
+    "GROK-QH5S-NYZD-1651": {
+      "code": "GROK-QH5S-NYZD-1651",
+      "tokens": 100,
+      "label": "Ключ на 100 токенов",
+      "createdAt": 1789295691733,
+      "isRedeemed": false,
+      "maxUses": 1,
+      "usedCount": 0
+    },
+    "GROK-QN26-C4SW-IX85": {
+      "code": "GROK-QN26-C4SW-IX85",
+      "tokens": 100,
+      "label": "Ключ на 100 токенов",
+      "createdAt": 1789295692381,
+      "isRedeemed": true,
+      "maxUses": 1,
+      "usedCount": 1,
+      "redeemedAt": 1789295714018,
+      "redeemedBy": "user_acecbn8"
+    },
+    "GROK-HR4R-S3I1-07IO": {
+      "code": "GROK-HR4R-S3I1-07IO",
+      "tokens": 100,
+      "label": "Ключ на 100 токенов",
+      "createdAt": 1789295692381,
+      "isRedeemed": false,
+      "maxUses": 1,
+      "usedCount": 0
+    },
+    "GROK-LZJX-XDFK-8BC2": {
+      "code": "GROK-LZJX-XDFK-8BC2",
+      "tokens": 25001,
+      "label": "Ключ на 25 001 токенов",
+      "createdAt": 1789296274073,
+      "isRedeemed": true,
+      "maxUses": 1,
+      "usedCount": 1,
+      "redeemedAt": 1789296324160,
+      "redeemedBy": "user_acecbn8"
+    },
+    "GROK-MYY0-Z4OW-TQ7D": {
+      "code": "GROK-MYY0-Z4OW-TQ7D",
+      "tokens": 120001,
+      "label": "Ключ на 120 001 токенов",
+      "createdAt": 1789296800306,
+      "isRedeemed": false,
+      "maxUses": 1,
+      "usedCount": 0
     }
   },
   "users": {
@@ -47,7 +105,31 @@
       "totalTokensUsed": 122,
       "createdAt": 1789295498019,
       "lastActive": 1789295506258
+    },
+    "user_acecbn8": {
+      "id": "user_acecbn8",
+      "name": "Пользователь #user_",
+      "tokensBalance": 28262,
+      "totalTokensUsed": 1839,
+      "createdAt": 1789295561799,
+      "lastActive": 1789296950889
+    },
+    "test_user_1": {
+      "id": "test_user_1",
+      "name": "Пользователь #test_",
+      "tokensBalance": 4894,
+      "totalTokensUsed": 106,
+      "createdAt": 1789297712023,
+      "lastActive": 1789297712688
+    },
+    "test_user_verify": {
+      "id": "test_user_verify",
+      "name": "Пользователь #test_",
+      "tokensBalance": 14876,
+      "totalTokensUsed": 124,
+      "createdAt": 1789297784549,
+      "lastActive": 1789297787073
     }
   },
-  "totalTokensConsumed": 122
+  "totalTokensConsumed": 2191
 }
